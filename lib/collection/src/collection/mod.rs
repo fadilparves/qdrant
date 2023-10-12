@@ -374,6 +374,7 @@ impl Collection {
                 })
                 .collect(),
             transfers,
+            shards_key_mapping: shards_holder.get_shard_key_to_ids_mapping(),
         }
     }
 
