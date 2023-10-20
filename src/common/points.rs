@@ -4,9 +4,9 @@ use collection::operations::point_ops::{
     PointInsertOperations, PointOperations, PointsSelector, WriteOrdering,
 };
 use collection::operations::types::{
-    CoreSearchRequestBatch, CountRequest, CountResult, GroupsResult, PointRequest,
-    RecommendGroupsRequest, Record, ScrollRequest, ScrollResult, SearchGroupsRequest,
-    SearchRequest, SearchRequestBatch, UpdateResult,
+    CoreSearchRequestBatch, CountRequest, CountResult, DiscoverRequest, DiscoverRequestBatch,
+    GroupsResult, PointRequest, RecommendGroupsRequest, Record, ScrollRequest, ScrollResult,
+    SearchGroupsRequest, SearchRequest, SearchRequestBatch, UpdateResult,
 };
 use collection::operations::vector_ops::{DeleteVectors, UpdateVectors, VectorOperations};
 use collection::operations::{CollectionUpdateOperations, CreateIndex, FieldIndexOperations};
@@ -514,6 +514,26 @@ pub async fn do_recommend_point_groups(
     read_consistency: Option<ReadConsistency>,
 ) -> Result<GroupsResult, StorageError> {
     toc.group(collection_name, request.into(), read_consistency, None)
+        .await
+}
+
+pub async fn do_discover_points(
+    toc: &TableOfContent,
+    collection_name: &str,
+    request: DiscoverRequest,
+    read_consistency: Option<ReadConsistency>,
+) -> Result<Vec<ScoredPoint>, StorageError> {
+    toc.discover(collection_name, request, read_consistency)
+        .await
+}
+
+pub async fn do_discover_batch_points(
+    toc: &TableOfContent,
+    collection_name: &str,
+    request: DiscoverRequestBatch,
+    read_consistency: Option<ReadConsistency>,
+) -> Result<Vec<Vec<ScoredPoint>>, StorageError> {
+    toc.discover_batch(collection_name, request, read_consistency)
         .await
 }
 
